@@ -13,7 +13,12 @@ var mdAutenticacion= require('../middlewares/autenticacion');
 //Obtiene todos los usuarios
 app.get('/',(req,res,next)=>{
 
+    var desde=req.query.desde|| 0; //Si viene vacio pne 0
+    desde=Number(desde);
+
     Usuario.find({},'nombre email img role')
+    .skip(desde) //Salta los registros que se le mande (salta los registros)
+    .limit(5)//Obtiene solo 5 registros
         .exec((err,usuarios)=>{
 
             if(err){
@@ -23,12 +28,18 @@ app.get('/',(req,res,next)=>{
                     errors:err
                     });
             }
-        
-            return res.status(200).json({
-                ok:true,
-                usuarios:usuarios
+
+            Usuario.count({},(err,conteo)=>{
+                return res.status(200).json({
+                    ok:true,
+                    usuarios:usuarios,
+                    total:conteo
+                    });
                 });
+
             });
+        
+         
      
 });
 
@@ -126,10 +137,6 @@ app.post('/',mdAutenticacion.verificaTokens,(req,res)=>{
             });
         
     });
-
-
-  
-   
 
 });
 

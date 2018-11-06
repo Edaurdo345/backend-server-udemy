@@ -20,7 +20,7 @@ jwt.verify(token,SEED,(err,decoded)=>{
         });
     }
 
-    //Mandamos datos en request
+    //Mandamos datos en request este puede ser llamado desde cualquier peticion que usemos esta funcion
     req.usuario=decoded;
 
     /*return res.status(201).json({
